@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Para ha imo ✨</title>
+    <style>
+        :root {
+            --pink: #ff4d6d;
+            --glass: rgba(255, 255, 255, 0.85);
+        }
+        body {
+            background: linear-gradient(135deg, #fff0f3 0%, #ffccd5 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+        .container {
+            text-align: center;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 40px 25px;
+            border-radius: 35px;
+            box-shadow: 0 20px 45px rgba(255, 77, 109, 0.2);
+            width: 85%;
+            max-width: 380px;
+            z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        h1 { color: var(--pink); font-size: 1.5rem; margin-bottom: 30px; line-height: 1.4; }
+        .btn-container { display: flex; flex-direction: column; align-items: center; gap: 15px; min-height: 200px; }
+        button {
+            padding: 16px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            -webkit-tap-highlight-color: transparent;
+        }
+        #yesBtn { background: var(--pink); color: white; box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3); }
+        #noBtn { background: white; color: var(--pink); border: 2px solid var(--pink); }
+        .heart { position: fixed; top: -10vh; pointer-events: none; z-index: 1; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+    </style>
+</head>
+<body onclick="unlock()">
+
+    <audio id="music" preload="auto">
+        <source src="https://files.catbox.moe/972wqu.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container" id="mainCard">
+        <h1 id="question">Will you be my Valentine? 🎀</h1>
+        <div class="btn-container" id="btnGroup">
+            <button id="yesBtn" onclick="handleYes()">Yes</button>
+            <button id="noBtn" onclick="handleNo()">No</button>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('music');
+        let noCount = 0;
+        let unlocked = false;
+
+        const phrases = ["No", "Huh?","Kayano? 🤨", "Pagbigyi gaak 🥺", "Pleasee anteh! 😭", "papalitan hin imo karuyag ano? Jay?", "PINDOTAA NAGA PLEASE :<", "Mag uuraw na ak 😭"];
+
+        function unlock() {
+            if (!unlocked) {
+                audio.play().then(() => { audio.pause(); audio.currentTime = 0; unlocked = true; }).catch(() => {});
+            }
+        }
+
+        function handleNo() {
+            unlock();
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            noCount++;
+            noBtn.innerText = phrases[noCount % phrases.length];
+            const currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+            yesBtn.style.fontSize = (currentSize + 15) + "px";
+            yesBtn.style.padding = (currentSize * 0.6) + "px " + (currentSize * 1.2) + "px";
+        }
+
+        function handleYes() {
+            unlock();
+            audio.volume = 1.0;
+            audio.play();
+            document.getElementById('question').innerHTML = "YEHEYYY MAARAM BAWO AK NGA KARUYAG NIM MAKIPAG DATE HAAK MWEHEHEHEHE🫶✨️";
+            document.getElementById('btnGroup').style.display = 'none';
+            setInterval(createHeart, 250);
+        }
+
+        function createHeart() {
+            const h = document.createElement('div');
+            h.classList.add('heart');
+            h.innerHTML = ['❤️', '💖', '💝', '✨'][Math.floor(Math.random() * 4)];
+            h.style.left = Math.random() * 100 + "vw";
+            h.style.fontSize = (Math.random() * 20 + 20) + "px";
+            h.style.animationDuration = (Math.random() * 2 + 2) + "s";
+            document.body.appendChild(h);
+            setTimeout(() => h.remove(), 4000);
+        }
+    </script>
+</body>
+</html>
